@@ -8,7 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* From login.html */
+        /* ================================================ */
+        /* শুধুমাত্র লগইন ইন্টারফেসের জন্য পরিবর্তিত CSS      */
+        /* ================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -17,35 +19,25 @@
         }
         
         body {
-            background: linear-gradient(135deg, #004d40, #00796b, #4db6ac, #ffab00);
-            background-size: 400% 400%;
+            /* একটি নতুন, পরিচ্ছন্ন ব্যাকগ্রাউন্ড */
+            background: #eef5f3;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            animation: animatedGradient 15s ease infinite;
-        }
-
-        @keyframes animatedGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         
         .login-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            /* নতুন কার্ড ডিজাইন */
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             padding: 50px 40px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid #e0e0e0;
             transition: all 0.5s ease-in-out;
         }
         
@@ -55,26 +47,89 @@
             pointer-events: none;
         }
 
-        .logo-container { margin-bottom: 30px; }
-        .logo { width: 90px; height: 90px; margin: 0 auto 20px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; }
-        .logo svg { width: 50px; height: 50px; }
-        h1 { color: #ffffff; font-size: 32px; margin-bottom: 8px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .subtitle { color: #e0f2f1; font-size: 18px; margin-bottom: 35px; font-weight: 400; }
-        .form-group { margin-bottom: 25px; text-align: left; }
-        label { display: block; margin-bottom: 10px; color: #ffca28; font-weight: 600; font-size: 16px; }
-        input[type="password"] { width: 100%; padding: 16px 20px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 10px; font-size: 16px; transition: all 0.3s; background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
-        input[type="password"]::placeholder { color: rgba(255, 255, 255, 0.6); }
-        input[type="password"]:focus { outline: none; border-color: #ffca28; box-shadow: 0 0 15px rgba(255, 202, 40, 0.3); }
-        .login-btn { background: linear-gradient(to right, #ffb300, #ff8f00); color: #1a1a1a; border: none; border-radius: 10px; padding: 16px; width: 100%; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
-        .login-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 179, 0, 0.3); }
+        .logo-container { margin-bottom: 25px; }
+        .logo { 
+            width: 80px; 
+            height: 80px; 
+            margin: 0 auto 15px; 
+            background: linear-gradient(135deg, #00796b, #004d40); 
+            border-radius: 50%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+        }
+        .logo svg { width: 45px; height: 45px; }
+        h1 { 
+            /* নতুন টেক্সট স্টাইল */
+            color: #1a202c; 
+            font-size: 28px; 
+            margin-bottom: 5px; 
+            font-weight: 700; 
+        }
+        .subtitle { 
+            color: #4a5568; 
+            font-size: 16px; 
+            margin-bottom: 30px; 
+            font-weight: 400; 
+        }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #2d3748; 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        input[type="password"] { 
+            /* নতুন ইনপুট ফিল্ড ডিজাইন */
+            width: 100%; 
+            padding: 14px 18px; 
+            border: 1px solid #cbd5e0; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            transition: all 0.3s; 
+            background-color: #f7fafc; 
+            color: #2d3748; 
+        }
+        input[type="password"]::placeholder { color: #a0aec0; }
+        input[type="password"]:focus { 
+            outline: none; 
+            border-color: #00796b; 
+            box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.2); 
+            background-color: #ffffff;
+        }
+        .login-btn { 
+            /* নতুন বাটন ডিজাইন */
+            background: #00796b; 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 12px; 
+            padding: 15px; 
+            width: 100%; 
+            font-size: 18px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            margin-top: 10px; 
+        }
+        .login-btn:hover { 
+            background: #004d40;
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(0, 77, 64, 0.25); 
+        }
         .message { margin-top: 20px; padding: 12px; border-radius: 8px; font-weight: 500; text-align: center; display: none; }
         .error { background-color: #ffebee; color: #c62828; }
+
+        /* Welcome Screen অপরিবর্তিত */
         #post-login-welcome { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; z-index: 10000; opacity: 0; transition: opacity 0.5s ease-in-out; }
         #post-login-welcome.visible { opacity: 1; }
         #post-login-welcome h1 { color: white; font-size: clamp(2.5em, 5vw, 4em); text-align: center; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.3); animation: text-pop-in 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; transform: scale(0.8); opacity: 0; letter-spacing: 1px; }
         @keyframes text-pop-in { to { transform: scale(1); opacity: 1; } }
 
-        /* From main.html */
+        /* ================================================ */
+        /* মূল অ্যাপ্লিকেশনের CSS এখান থেকে অপরিবর্তিত রয়েছে  */
+        /* ================================================ */
         :root{
           --green:#0f9d58;
           --deep-green:#0b8450;
@@ -204,17 +259,22 @@
 <body>
     <div class="login-container" id="loginContainer">
         <div class="logo-container">
-            <div class="Logo">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff"><path d="M19.49 13.29l-1.8-1.8-.71.71 1.1 1.1-2.52 2.52-1.77-1.77-5.3 5.31L10.26 21l8.53-8.53-2.12-2.12.71-.71 2.11 2.12zm-9.3-5.23L4.9 2.77 2.78 4.9l5.29 5.29 1.42-1.41zm-1.41 0L12 4.77l-1.41-1.41-3.54 3.54L8.46 8.3zm3.54-3.54L10.88.11l-1.42-1.42L5.92 2.22l3.53 3.53zM22.56 2.11l-2.12 2.12-1.41-1.41 2.12-2.12 1.41 1.41z"/></svg>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z"/>
+                    <path d="M14.24 6.34l-1.41-1.41-5.66 5.66 1.41 1.41zM18.36 9.88l-1.41-1.41-1.41 1.41 1.41 1.41zM9.88 18.36l-1.41-1.41 1.41-1.41 1.41 1.41z"/>
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M19.07 4.93a10 10 0 00-14.14 0l1.41 1.41a8 8 0 0111.32 0l1.41-1.41zM6.34 17.66l1.41-1.41a2 2 0 10-2.82-2.82l-1.42 1.41a4 4 0 005.66 5.66z"/>
+                </svg>
             </div>
             <h1>Cricket Carnival 2025</h1>
-            <div class="subtitle"></div>
+            <div class="subtitle">Admin Panel Access</div>
         </div>
         
         <form id="loginForm">
             <div class="form-group">
                 <label for="loginCode">Login Code</label>
-                <input type="password" id="loginCode" placeholder="Enter your secret code" required>
+                <input type="password" id="loginCode" placeholder="Enter secret code" required>
             </div>
             
             <button type="submit" class="login-btn">Enter Carnival</button>
@@ -638,11 +698,10 @@
         </div>
     </div>
 
-
     <script type="module">
         // Firebase SDK functions আমদানি করুন
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, set, get, child, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
         // আপনার দেওয়া Firebase configuration
         const firebaseConfig = {
@@ -655,19 +714,18 @@
             appId: "1:669183768621:web:a284feab1070999525e0a4"
         };
         
-
         // Firebase চালু করুন
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const dbRef = ref(getDatabase());
 
-        // Global variables to hold data
+        // Global variables
         let scorecardData = {};
         let squadData = {};
         let pointsTableData = {};
         let fixtureCustomData = {};
         let currentMatchRef = null;
-
+        
         // ডেটা লোড করার জন্য ডিফল্ট অবজেক্ট
         const defaultSquadData = {
             "Corporate_Credit": Array.from({length: 11}, (_, i) => ({ name: `CC Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=cc${i}`, position: i === 0 ? 'Captain' : (i < 5 ? 'Batsman' : (i < 10 ? 'Bowler' : 'All-rounder')) })),
@@ -683,42 +741,104 @@
             "SDD_Division": Array.from({length: 11}, (_, i) => ({ name: `SDD Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=sdd${i}`, position: i === 0 ? 'Captain' : (i < 5 ? 'Batsman' : (i < 10 ? 'Bowler' : 'All-rounder')) })),
             "Principal_Branch": Array.from({length: 11}, (_, i) => ({ name: `PB Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=pb${i}`, position: i === 0 ? 'Captain' : (i < 5 ? 'Batsman' : (i < 10 ? 'Bowler' : 'All-rounder')) })),
         };
+
+        // =================================================
+        // ## নতুন ফাংশন: ডেটা সেভ এবং লোড করার জন্য ##
+        // =================================================
+
+        /**
+         * নির্দিষ্ট ম্যাচের ডেটা Local Storage এবং Firebase-এ সেভ করে।
+         * @param {string} matchRef - ম্যাচের ইউনিক রেফারেন্স।
+         * @param {object} data - সেভ করার জন্য ম্যাচের ডেটা।
+         */
+        function saveMatchData(matchRef, data) {
+            if (!matchRef || !data) return;
+
+            // 1. Firebase-এ ডেটা সেভ করুন
+            const firebaseMatchRef = ref(database, `scorecardData/${matchRef}`);
+            set(firebaseMatchRef, data)
+                .then(() => console.log(`'${matchRef}' ম্যাচটি Firebase-এ সফলভাবে সেভ হয়েছে।`))
+                .catch(error => console.error("Firebase সেভ করতে সমস্যা:", error));
+
+            // 2. Local Storage-এ ডেটা সেভ করুন
+            try {
+                localStorage.setItem(`scorecard_${matchRef}`, JSON.stringify(data));
+                console.log(`'${matchRef}' ম্যাচটি Local Storage-এ সফলভাবে সেভ হয়েছে।`);
+            } catch (e) {
+                console.error("Local Storage সেভ করতে সমস্যা:", e);
+            }
+        }
+
+        /**
+         * নির্দিষ্ট ম্যাচের ডেটা প্রথমে Local Storage থেকে, তারপর Firebase থেকে লোড করে।
+         * @param {string} matchRef - ম্যাচের ইউনিক রেফারেন্স।
+         * @returns {Promise<object|null>} - ম্যাচের ডেটা অবজেক্ট বা null।
+         */
+        async function loadMatchData(matchRef) {
+            if (!matchRef) return null;
+
+            // 1. প্রথমে Local Storage থেকে ডেটা লোড করার চেষ্টা করুন
+            const localData = localStorage.getItem(`scorecard_${matchRef}`);
+            if (localData) {
+                console.log(`'${matchRef}' ম্যাচটি Local Storage থেকে লোড হয়েছে।`);
+                try {
+                    return JSON.parse(localData);
+                } catch (e) {
+                    console.error("Local Storage থেকে ডেটা পার্স করতে সমস্যা:", e);
+                    localStorage.removeItem(`scorecard_${matchRef}`); // ক্ষতিগ্রস্ত ডেটা মুছে ফেলুন
+                }
+            }
+
+            // 2. Local Storage-এ না থাকলে Firebase থেকে লোড করুন
+            try {
+                const firebaseMatchRef = ref(database, `scorecardData/${matchRef}`);
+                const snapshot = await get(firebaseMatchRef);
+                if (snapshot.exists()) {
+                    console.log(`'${matchRef}' ম্যাচটি Firebase থেকে লোড হয়েছে।`);
+                    const firebaseData = snapshot.val();
+                    // ভবিষ্যতে দ্রুত লোড করার জন্য Local Storage-এ সেভ করে রাখুন
+                    localStorage.setItem(`scorecard_${matchRef}`, JSON.stringify(firebaseData));
+                    return firebaseData;
+                } else {
+                    console.log(`'${matchRef}' ম্যাচের জন্য কোনো ডেটা পাওয়া যায়নি।`);
+                    return null; // কোনো ডেটা পাওয়া যায়নি
+                }
+            } catch (error) {
+                console.error("Firebase থেকে ডেটা লোড করতে সমস্যা:", error);
+                return null;
+            }
+        }
         
-        // অ্যাডমিন প্যানেল লোড হওয়ার সময় Firebase থেকে সব ডেটা আনুন
+        // অ্যাডমিন প্যানেল লোড হওয়ার সময় শুধুমাত্র squad, points table ইত্যাদি লোড হবে
         function loadInitialData() {
             get(dbRef).then((snapshot) => {
               if (snapshot.exists()) {
                 const data = snapshot.val();
-                scorecardData = data.scorecardData || {};
+                // scorecardData এখানে লোড করা হবে না
                 squadData = data.squadData || defaultSquadData;
                 pointsTableData = data.pointsTable || {};
                 fixtureCustomData = data.fixtureCustomData || {};
-
-                console.log("All data loaded from Firebase.");
+                console.log("Initial admin data loaded from Firebase.");
                 
-                // UI তে ডেটা দেখানোর জন্য ফাংশন কল করুন
                 populatePointsTable();
                 populateFixtures();
                 updateMainDropdown();
-
               } else {
                 console.log("No data available in Firebase, using defaults.");
-                squadData = defaultSquadData; // যদি কোনো ডেটা না থাকে, ডিফল্ট ডেটা ব্যবহার করুন
+                squadData = defaultSquadData;
               }
             }).catch((error) => {
               console.error("Firebase load error:", error);
-              squadData = defaultSquadData; // এরর হলেও ডিফল্ট ডেটা ব্যবহার করুন
+              squadData = defaultSquadData;
             });
         }
-
+        
+        // ডেটা সেভ এবং UI রিফ্রেশ করার ফাংশন
         function saveAndRender(matchRef, team1, team2) {
-            set(ref(database, 'scorecardData'), scorecardData)
-                .then(() => {
-                    console.log("Data saved to Firebase successfully.");
-                })
-                .catch((error) => {
-                    console.error("Error saving data: ", error);
-                });
+            // শুধুমাত্র বর্তমান ম্যাচের ডেটা সেভ করুন
+            if (scorecardData[matchRef]) {
+                saveMatchData(matchRef, scorecardData[matchRef]);
+            }
             
             renderScorecard(matchRef, team1, team2);
             if (document.getElementById('live-panel').style.display !== 'none') {
@@ -726,23 +846,36 @@
             }
         }
         
+        // স্কোরকার্ড সেভ করার বাটন ফাংশন
         window.saveScorecard = function() {
-            set(ref(database, 'scorecardData'), scorecardData);
-            alert("Scorecard data saved successfully!");
+            if (currentMatchRef && scorecardData[currentMatchRef]) {
+                saveMatchData(currentMatchRef, scorecardData[currentMatchRef]);
+                alert("Scorecard data saved successfully!");
+            } else {
+                alert("No match selected to save.");
+            }
         }
 
+        // ম্যাচ রিসেট করার ফাংশন
         window.resetScorecard = function() {
             if (confirm("Are you sure you want to reset all data for this match? This cannot be undone.")) {
                 const matchInfo = getMatchInfo();
                 if(matchInfo) {
-                    if (scorecardData && scorecardData[matchInfo.matchRef]) {
-                        delete scorecardData[matchInfo.matchRef];
-                    }
-                    set(ref(database, 'scorecardData'), scorecardData)
-                    .then(() => {
-                        renderScorecard(matchInfo.matchRef, matchInfo.team1, matchInfo.team2);
-                        alert("Match data has been reset.");
+                    // Global variable থেকে ডেটা মুছে ফেলুন
+                    delete scorecardData[matchInfo.matchRef];
+                    
+                    // Local Storage থেকে ডেটা মুছে ফেলুন
+                    localStorage.removeItem(`scorecard_${matchInfo.matchRef}`);
+                    
+                    // Firebase থেকে ডেটা মুছে ফেলুন
+                    const firebaseMatchRef = ref(database, `scorecardData/${matchInfo.matchRef}`);
+                    remove(firebaseMatchRef).then(() => {
+                        console.log("Firebase data for the match has been removed.");
                     });
+
+                    // UI আবার রেন্ডার করুন
+                    renderScorecard(matchInfo.matchRef, matchInfo.team1, matchInfo.team2);
+                    alert("Match data has been reset.");
                 }
             }
         }
@@ -861,36 +994,53 @@
             infoPanel.innerHTML = finalHtml;
         }
     
-        dropdownContent.addEventListener('click', (event) => {
+        dropdownContent.addEventListener('click', async (event) => {
             if (event.target.tagName === 'A') {
+                event.preventDefault();
+                dropdownContent.classList.remove('show');
+
                 const matchText = event.target.getAttribute('data-match');
                 const matchRef = event.target.getAttribute('data-match-ref');
-                selectedMatchSpan.textContent = matchText;
-    
+                currentMatchRef = matchRef;
+                const team1Name = matchText.split(' vs ')[0].trim().replace(/QF\d: |SF\d: |Final: /, '');
+                const team2Name = matchText.split(' vs ')[1].split(' (')[0].trim();
+
+                // ম্যাচ সম্পর্কিত তথ্য আপডেট করুন
                 const fixture = fixtureData.find(f => f.matchRef === matchRef);
-                if (fixture) {
-                    dateTimeElement.innerHTML = `<strong>Date & Time:</strong> ${fixture.date}, ${fixture.time} LOCAL`;
-                } else {
-                    dateTimeElement.innerHTML = `<strong>Date & Time:</strong> TBD`;
-                }
-                
+                dateTimeElement.innerHTML = fixture ? `<strong>Date & Time:</strong> ${fixture.date}, ${fixture.time} LOCAL` : `<strong>Date & Time:</strong> TBD`;
+                selectedMatchSpan.textContent = matchText;
+
                 const teams = matchText.replace(/QF\d: |SF\d: |Final: /, '').split(' vs ');
                 if (teams.length === 2) {
-                    const team1Name = teams[0].trim();
-                    const team2Name = teams[1].split('(')[0].trim();
+                    const team1 = teams[0].trim();
+                    const team2 = teams[1].split("(")[0].trim();
+
+                    // নির্দিষ্ট ম্যাচের ডেটা লোড করুন
+                    const loadedData = await loadMatchData(matchRef);
+                    if (loadedData) {
+                        scorecardData[matchRef] = loadedData;
+                    }
+
+                    // স্কোরকার্ড ও লাইভ স্কোর দেখান
+                    renderScorecard(matchRef, team1, team2);
+                    renderLiveScore(matchRef);
                     
-                    if(teamNameList.includes(team1Name) && teamNameList.includes(team2Name)) {
-                        const team1Key = reverseTeamNameMap[team1Name];
-                        const team2Key = reverseTeamNameMap[team2Name];
+                    // Info প্যানেলে Playing XI দেখান
+                    if(teamNameList.includes(team1) && teamNameList.includes(team2)) {
+                        const team1Key = reverseTeamNameMap[team1];
+                        const team2Key = reverseTeamNameMap[team2];
                         if (team1Key && team2Key) {
                             displayPlayingXI(team1Key, team2Key, team1Name, team2Name);
                         }
                     } else {
-                        infoPanel.innerHTML = `<h3>Match Info</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি। পয়েন্ট টেবিল ট্যাব থেকে দল সিলেক্ট করার পর প্লেয়ার লিস্ট পাওয়া যাবে।</p>`;
+                        infoPanel.innerHTML = `<h3>Match Info</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি।</p>`;
+                         document.getElementById("scorecardContent").innerHTML = `<h3>Scorecard</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি।</p>`;
+                         document.getElementById("live-panel").innerHTML = `<h3>Live Score</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি।</p>`;
                     }
                 }
             }
         });
+
         window.addEventListener('click', () => { if (dropdownContent.classList.contains('show')) { dropdownContent.classList.remove('show'); } });
     
         const modal = document.getElementById('squadModal');
@@ -932,7 +1082,6 @@
             }
         });
         
-        // --- Squad Save Button ---
         saveSquadBtn.addEventListener('click', function() {
             const teamId = modal.dataset.teamId;
             const rows = modalBody.querySelectorAll('tbody tr');
@@ -946,7 +1095,6 @@
             });
             squadData[teamId] = newPlayers;
             
-            // Firebase এ সেভ করুন
             set(ref(database, 'squadData'), squadData).then(() => {
                 alert('Changes have been saved successfully to Firebase!');
                 modal.style.display = 'none';
@@ -999,8 +1147,6 @@
         closeModalBtn.onclick = function() { modal.style.display = "none"; }
         window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; } }
 
-        // --- Points Table and Fixture Logic ---
-
         function populatePointsTable() {
             if (!pointsTableData || Object.keys(pointsTableData).length === 0) return;
 
@@ -1025,7 +1171,6 @@
                 });
             });
 
-            // Knockout selections populate
             if (pointsTableData.knockoutSelections) {
                 for (const key in pointsTableData.knockoutSelections) {
                     const selectEl = document.getElementById(key);
@@ -1043,11 +1188,9 @@
                 const matchRef = item.dataset.matchRef;
                 const matchData = fixtureCustomData[matchRef];
                 if (matchData) {
-                    // Populate notes
                     const notesEl = item.querySelector('.match-notes');
                     if (notesEl) notesEl.textContent = matchData.notes || '';
 
-                    // Populate knockout teams
                     const selects = item.querySelectorAll('.fixture-knockout-select');
                     if (selects.length === 2) {
                         selects[0].value = matchData.team1 || '';
@@ -1057,7 +1200,6 @@
             });
         }
         
-        // --- Save Points Table Button ---
         document.getElementById('savePointsBtn').addEventListener('click', () => {
             const dataToSave = {};
             document.querySelectorAll('.points-table-section h4').forEach(header => {
@@ -1079,7 +1221,6 @@
                 dataToSave[groupName] = groupData;
             });
             
-            // knockout selections
             dataToSave.knockoutSelections = {};
             document.querySelectorAll('.knockout-selector select').forEach(select => {
                 dataToSave.knockoutSelections[select.id] = select.value;
@@ -1087,11 +1228,10 @@
 
             set(ref(database, 'pointsTable'), dataToSave).then(() => {
                 alert('Points Table saved to Firebase successfully!');
-                pointsTableData = dataToSave; // Update local variable
+                pointsTableData = dataToSave;
             }).catch(error => console.error("Error saving points table:", error));
         });
 
-        // --- Save Fixtures Button ---
         document.getElementById('saveFixturesBtn').addEventListener('click', () => {
             const dataToSave = {};
             document.querySelectorAll('.fixture-match-item').forEach(item => {
@@ -1111,7 +1251,7 @@
 
             set(ref(database, 'fixtureCustomData'), dataToSave).then(() => {
                 alert('Fixtures data saved to Firebase successfully!');
-                fixtureCustomData = dataToSave; // Update local variable
+                fixtureCustomData = dataToSave;
             }).catch(error => console.error("Error saving fixtures:", error));
         });
     
@@ -1436,27 +1576,26 @@
               return;
           }
 
-window.incrementOver = function(matchRef, bowlingTeam, index) {
-    const bowler = scorecardData[matchRef][bowlingTeam].bowling[index];
-    // bowler.overs কে স্ট্রিং হিসেবে নেওয়া হচ্ছে যাতে ফ্লোটিং পয়েন্টের সমস্যা না হয়
-    let oversStr = String(bowler.overs || '0.0');
-    let parts = oversStr.split('.');
-    let fullOvers = parseInt(parts[0]) || 0;
-    let balls = parseInt(parts[1]) || 0;
-    
-    if (balls < 5) {
-        balls++;
-    } else {
-        balls = 0;
-        fullOvers++;
-    }
-    
-    // আবার স্ট্রিং ফরম্যাটে রূপান্তর
-    bowler.overs = `${fullOvers}.${balls}`;
-    
-    const matchInfo = getMatchInfo();
-    saveAndRender(matchRef, matchInfo.team1, matchInfo.team2);
-}
+          window.incrementOver = function(matchRef, bowlingTeam, index) {
+              const bowler = scorecardData[matchRef][bowlingTeam].bowling[index];
+              let oversStr = String(bowler.overs || '0.0');
+              let parts = oversStr.split('.');
+              let fullOvers = parseInt(parts[0]) || 0;
+              let balls = parseInt(parts[1]) || 0;
+              
+              if (balls < 5) {
+                  balls++;
+              } else {
+                  balls = 0;
+                  fullOvers++;
+              }
+              
+              bowler.overs = `${fullOvers}.${balls}`;
+              
+              const matchInfo = getMatchInfo();
+              saveAndRender(matchRef, matchInfo.team1, matchInfo.team2);
+          }
+
           const { team1, team2 } = matchInfo;
           const matchData = scorecardData[matchRef];
           const toss = matchData.toss;
@@ -1466,7 +1605,6 @@ window.incrementOver = function(matchRef, bowlingTeam, index) {
           let html = `<div class="live-score-container"><h3>${team1} vs ${team2}</h3>`;
           html += `<div class="live-score-summary">${toss.winner} won the toss and chose to ${toss.decision}.</div>`;
 
-          // Innings 1 Card
           const score1 = calculateTeamTotal(matchRef, firstInningsTeam);
           const balls1 = calculateBallsBowled(matchRef, secondInningsTeam);
           const overs1 = `${Math.floor(balls1 / 6)}.${balls1 % 6}`;
@@ -1482,7 +1620,6 @@ window.incrementOver = function(matchRef, bowlingTeam, index) {
           const totalBallsForMatch = (matchData.totalOvers || 10) * 6;
           const isSecondInnings = (balls1 >= totalBallsForMatch || wickets1 === 11 || balls2 > 0);
 
-          // Innings 2 Card
           if (isSecondInnings) {
               const score2 = calculateTeamTotal(matchRef, secondInningsTeam);
               const overs2 = `${Math.floor(balls2 / 6)}.${balls2 % 6}`;
@@ -1549,28 +1686,6 @@ window.incrementOver = function(matchRef, bowlingTeam, index) {
               return acc + (fullOvers * 6) + balls;
           }, 0);
       }
-      
-      dropdownContent.addEventListener('click', (event) => {
-          if (event.target.tagName === 'A') {
-              event.preventDefault();
-              dropdownContent.classList.remove('show');
-              const matchText = event.target.getAttribute('data-match');
-              const matchRef = event.target.getAttribute('data-match-ref');
-              currentMatchRef = matchRef;
-              const teams = matchText.replace(/QF\d: |SF\d: |Final: /, '').split(' vs ');
-              if (teams.length === 2) {
-                  const team1 = teams[0].trim();
-                  const team2 = teams[1].split("(")[0].trim();
-                  if ((teamNameList.includes(team1) || team1.includes("Winner")) && (teamNameList.includes(team2) || team2.includes("Runner-up"))) {
-                      renderScorecard(matchRef, team1, team2);
-                      renderLiveScore(matchRef);
-                  } else {
-                      document.getElementById("scorecardContent").innerHTML = `<h3>Scorecard</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি।</p>`;
-                      document.getElementById("live-panel").innerHTML = `<h3>Live Score</h3><p>নকআউট ম্যাচের দলগুলো এখনো নির্ধারিত হয়নি।</p>`;
-                  }
-              }
-          }
-      });
     </script>
 </body>
 </html>
