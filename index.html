@@ -1,1017 +1,175 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Cricket Live Score - Final</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-
-    :root{
-      --bg-light: #EAF6FF;
-      --bg: #f7fbff;
-      --card: #ffffff;
-      --navy: #0f2b5f;
-      --blue: #1e73d1;
-      --muted: #6b7280;
-      --border: #e6eef8;
-      --accent: #2b9cff;
-      --gold: #FFC107;
-      font-family: 'Inter', system-ui, -apple-system, Roboto, "Segoe UI", "Noto Sans", "Helvetica Neue", Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      background: linear-gradient(180deg,var(--bg-light),#ffffff 70%);
-      color:var(--navy);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      font-size:16px;
-      line-height:1.45;
-    }
-    a{color:var(--blue);text-decoration:none}
-    .container{max-width:1100px;margin:18px auto;padding:12px}
-    /* Welcome overlay */
-    #welcome-overlay{
-      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-      background: linear-gradient(160deg, rgba(30,115,209,0.95), rgba(15,43,95,0.95));
-      z-index:9999; transition:opacity .8s ease, visibility .6s ease;
-    }
-    #welcome-overlay.hidden{opacity:0; pointer-events:none; visibility:hidden}
-    #welcome-text{
-      color:#fff; font-size:clamp(28px,6vw,48px); text-align:center; font-weight:800; line-height:1.05;
-      text-shadow:0 8px 30px rgba(0,0,0,0.25); transform:translateY(0); padding:6px 12px;
-    }
-    /* Topbar */
-    .topbar{
-      background: linear-gradient(180deg,var(--blue), #114a90);
-      color:#fff; padding:18px; border-radius:12px; box-shadow:0 8px 30px rgba(14,40,80,0.08);
-    }
-    .top-title{font-weight:800;font-size:20px;margin:0}
-    .meta{display:flex;gap:14px;font-size:14px;margin-top:8px;flex-wrap:wrap;opacity:0.95}
-    /* Tabs */
-    .tabs{display:flex;gap:10px;padding-top:12px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.08)}
-    .tab{padding:8px 12px;color:rgba(255,255,255,0.95);cursor:pointer;background:none;border:none;font-family:inherit;font-size:15px;font-weight:600;border-radius:8px}
-    .tab:hover{filter:brightness(1.06)}
-    .tab.active{background:var(--card);color:var(--navy);box-shadow:0 6px 18px rgba(16,40,80,0.08)}
-    /* Card */
-    .card{background:var(--card);border-radius:12px;padding:20px;margin-top:0;border:1px solid var(--border);box-shadow:0 6px 24px rgba(15,35,70,0.03)}
-    .card.hidden{display:none!important}
-    h3{font-size:18px;color:var(--navy);margin:0 0 12px 0}
-    /* Dropdown */
-    .match-dropdown{position:relative;display:inline-block}
-    .dropdown-toggle{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);color:#fff;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;display:inline-flex;gap:10px;align-items:center}
-    .dropdown-content{display:none;position:absolute;right:0;top:calc(100% + 10px);min-width:320px;max-height:360px;overflow:auto;background:var(--card);border-radius:10px;box-shadow:0 20px 60px rgba(8,24,64,0.14);border:1px solid var(--border);z-index:999}
-    .dropdown-content a{display:block;padding:12px 14px;color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px dashed #f1f6fb}
-    .dropdown-content a:hover{background:#f6fbff}
-    .show{display:block}
-    /* Squads grid */
-    .squad-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:12px}
-    .squad-item{padding:16px;border-radius:10px;font-weight:700;color:var(--navy);text-align:center;background:linear-gradient(180deg,#ffffff,#fbfdff);border:1px solid #e9f4ff;box-shadow:0 10px 30px rgba(16,40,80,0.04);cursor:pointer}
-    .squad-item::before{content:"";height:4px;width:100%;position:absolute;left:0;top:0;border-radius:8px;background:var(--accent);display:block}
-    .squad-item:active{transform:translateY(1px)}
-    /* Tables */
-    .points-table,.player-table{width:100%;border-collapse:collapse;font-size:15px}
-    .points-table th,.player-table th{padding:12px;background:#f7fbff;color:var(--navy);font-weight:700;border-bottom:1px solid var(--border);text-align:left}
-    .points-table td,.player-table td{padding:12px;border-bottom:1px solid var(--border);color:var(--muted)}
-    .player-photo{width:52px;height:52px;border-radius:50%;object-fit:cover}
-    .player-photo-small{width:44px;height:44px;border-radius:50%;object-fit:cover;margin-right:12px}
-    .player-name{font-weight:700;color:var(--navy)}
-    .player-role{font-size:13px;color:var(--muted)}
-    /* Inline sections */
-    .toss-section{background:#f3f8ff;border:1px solid #e3efff;padding:12px;border-radius:8px;margin-bottom:12px;color:var(--navy);font-weight:700}
-    .scorecard-settings{background:#fbfbff;border:1px solid #eef6ff;padding:12px;border-radius:8px;margin-bottom:12px;color:var(--muted);font-weight:700}
-    .target-display{background:linear-gradient(90deg,#fff7eb,#fffdf8);border:1px solid #ffecd0;padding:12px;border-radius:8px;margin:12px 0;font-weight:800;color:#6b3f00}
-    .live-innings-card{border:1px solid var(--border);padding:14px;border-radius:10px;margin-bottom:14px;box-shadow:0 6px 20px rgba(16,40,80,0.03)}
-    .team-score{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:800;color:var(--navy)}
-    .live-player-details table{width:100%;border-collapse:collapse;font-size:15px}
-    .live-player-details td{padding:6px 0}
-    .match-result{background:linear-gradient(90deg,#e6f7ff,#dff3ff);padding:12px;border-radius:10px;text-align:center;font-weight:800;color:var(--blue);margin-top:12px}
-    /* Modal */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(6,12,34,0.6);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center;padding:18px}\n.modal-overlay.show{display:flex}
-    .modal-content{background:var(--card);margin:5% auto;padding:0;border:none;width:94%;max-width:760px;border-radius:12px;position:relative;animation:animatetop .4s;box-shadow:0 20px 60px rgba(8,24,64,0.12)}
-    @keyframes animatetop{from{top:-60px;opacity:0}to{top:0;opacity:1}}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--blue);color:white;border-radius:12px 12px 0 0}
-    .modal-close{color:white;font-size:22px;font-weight:700;cursor:pointer;background:transparent;border:none}
-    #modal-body-content{padding:16px;max-height:60vh;overflow:auto}
-    
-    /* Fixtures */
-    .fixture-day-card{background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;padding:12px;box-shadow:0 8px 30px rgba(16,40,80,0.03)}
-    .fixture-day-header{font-weight:800;color:var(--navy);margin-bottom:8px}
-    .fixture-match-item{padding:10px;border-radius:8px;border-bottom:1px solid #f1f6fb}
-    .fixture-match-item-details{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;}
-    .match-time{font-weight:800;color:var(--blue);min-width:86px}
-    .match-teams{display:flex;gap:8px;align-items:center;font-weight:700;color:var(--navy)}
-    
-    /* === Start: Match Notes Styling === */
-    .match-notes {
-        margin-top: 8px;
-        font-size: 13px;
-        color: #4b5563;
-        background-color: #f7f9fc;
-        padding: 8px 10px;
-        border-radius: 6px;
-        border-left: 3px solid var(--accent);
-        display: none; /* ডিফল্টভাবে লুকানো থাকবে */
-    }
-    .match-notes:not(:empty) {
-        display: block; /* লেখা থাকলেই কেবল দেখা যাবে */
-    }
-    /* === End: Match Notes Styling === */
-
-    /* === Start: Playing XI CSS === */
-    .playing-xi-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-    }
-    .team-name-header {
-        font-size: 17px;
-        background: #f3f8ff;
-        padding: 10px 14px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        border-left: 4px solid var(--accent);
-    }
-    .player-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .player-list li {
-        display: flex;
-        align-items: center;
-        padding: 10px 4px;
-        border-bottom: 1px solid #f1f6fb;
-    }
-    .player-list li:last-child {
-        border-bottom: none;
-    }
-    .player-details {
-        display: flex;
-        flex-direction: column;
-    }
-    /* === End: Playing XI CSS === */
-    
-    /* small screens */
-    @media (max-width:720px){
-      .container{padding:12px;margin:8px auto}
-      .topbar{padding:12px;border-radius:10px}
-      .tabs{overflow:auto;padding-bottom:8px}
-      .squad-list{grid-template-columns:1fr}
-      .dropdown-content{left:0;right:0;min-width:auto;width:100%;max-height:48vh}
-      .player-table th,.player-table td{padding:8px;font-size:14px}
-      .team-score{font-size:18px}
-      #welcome-text{font-size:20px}
-    }
-    @media (min-width:1000px){
-      .container{padding:18px}
-      .squad-list{grid-template-columns:repeat(3,1fr)}
-    }
-    /* ensure hidden utility */
-    .hidden{display:none!important}
-    .fade-in{animation:fadeIn .45s ease both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-</style>
-</head>
-<body>
-
-<div id="welcome-overlay">
-    <h1 id="welcome-text">Welcome to<br>Cricket Carnival 2025</h1>
-</div>
-
-<div class="container">
-<div class="topbar">
-<div class="top-title">
-<div class="match-dropdown">
-<button class="dropdown-toggle" id="dropdownBtn">
-<span id="selectedMatch">Select a Match</span> ▾
-</button>
-<div class="dropdown-content" id="myDropdown">
-<a data-match="ID vs Principal (Group D)" data-match-ref="id_vs_principal" href="#">ID vs Principal (Group D)</a>
-<a data-match="Corporate Credit vs Card Operation (Group A)" data-match-ref="cc_vs_co" href="#">Corporate Credit vs Card Operation (Group A)</a>
-<a data-match="Treasury vs Card Business (Group C)" data-match-ref="tr_vs_cb" href="#">Treasury vs Card Business (Group C)</a>
-<a data-match="Dhaka Central Zone vs Dhaka South Zone (Group B)" data-match-ref="dc_vs_ds" href="#">Dhaka Central Zone vs Dhaka South Zone (Group B)</a>
-<a data-match="Card Operation vs ICT Operation (Group A)" data-match-ref="co_vs_ict" href="#">Card Operation vs ICT Operation (Group A)</a>
-<a data-match="Card Business vs CAM &amp; RD (Group C)" data-match-ref="cb_vs_cam" href="#">Card Business vs CAM &amp; RD (Group C)</a>
-<a data-match="Corporate Credit vs ICT Operation (Group A)" data-match-ref="cc_vs_ict" href="#">Corporate Credit vs ICT Operation (Group A)</a>
-<a data-match="ID vs SDD (Group D)" data-match-ref="id_vs_sdd" href="#">ID vs SDD (Group D)</a>
-<a data-match="Dhaka South Zone vs Narayangonj Zone (Group B)" data-match-ref="ds_vs_nz" href="#">Dhaka South Zone vs Narayangonj Zone (Group B)</a>
-<a data-match="Treasury vs CAM &amp; RD (Group C)" data-match-ref="tr_vs_cam" href="#">Treasury vs CAM &amp; RD (Group C)</a>
-<a data-match="SDD vs Principal (Group D)" data-match-ref="sdd_vs_p" href="#">SDD vs Principal (Group D)</a>
-<a data-match="Dhaka Central Zone vs Narayangonj Zone (Group B)" data-match-ref="dc_vs_nz" href="#">Dhaka Central Zone vs Narayangonj Zone (Group B)</a>
-<a data-match="QF1: Winner A vs Runner-up C" data-match-ref="qf1" href="#">QF1: TBD vs TBD</a>
-<a data-match="QF2: Winner C vs Runner-up A" data-match-ref="qf2" href="#">QF2: TBD vs TBD</a>
-<a data-match="QF4: Winner D vs Runner-up B" data-match-ref="qf4" href="#">QF4: TBD vs TBD</a>
-<a data-match="QF3: Winner B vs Runner-up D" data-match-ref="qf3" href="#">QF3: TBD vs TBD</a>
-<a data-match="SF1: Winner QF2 vs Winner QF4" data-match-ref="sf1" href="#">SF1: TBD vs TBD</a>
-<a data-match="SF2: Winner QF1 vs Winner QF3" data-match-ref="sf2" href="#">SF2: TBD vs TBD</a>
-<a data-match="Final: Winner SF1 vs Winner SF2" data-match-ref="final" href="#">Final: TBD vs TBD</a>
-</div>
-</div>
-</div>
-<div class="meta">
-<div><strong>Series:</strong> Cricket Carnival 2025</div>
-<div><strong>Venue:</strong> Dhaka University Ground, Dhaka</div>
-<div id="matchDateTime"><strong>Date &amp; Time:</strong> Today, 3:00 PM LOCAL</div>
-</div>
-<div aria-label="Match Information" class="tabs" role="tablist">
-<button aria-controls="info-panel" aria-selected="true" class="tab active" id="info-tab" role="tab">Info</button>
-<button aria-controls="live-panel" aria-selected="false" class="tab" id="live-tab" role="tab" tabindex="-1">Live</button>
-<button aria-controls="scorecard-panel" aria-selected="false" class="tab" id="scorecard-tab" role="tab" tabindex="-1">Scorecard</button>
-<button aria-controls="squads-panel" aria-selected="false" class="tab" id="squads-tab" role="tab" tabindex="-1">Squads</button>
-<button aria-controls="points-panel" aria-selected="false" class="tab" id="points-tab" role="tab" tabindex="-1">Points Table</button>
-<button aria-controls="fixtures-panel" aria-selected="false" class="tab" id="fixtures-tab" role="tab" tabindex="-1">Fixtures</button>
-</div>
-</div>
-<div aria-labelledby="info-tab" class="card" id="info-panel" role="tabpanel">
-<h3>Match Info</h3>
-<p>উপরের ড্রপডাউন থেকে ম্যাচ সিলেক্ট করুন।</p>
-</div>
-<div aria-labelledby="live-tab" class="card" id="live-panel" role="tabpanel">
-<h3>Live Score</h3>
-<p>লাইভ স্কোর দেখার জন্য ড্রপডাউন থেকে ম্যাচ সিলেক্ট করুন।</p>
-</div>
-<div aria-labelledby="scorecard-panel" class="card hidden" id="scorecard-panel" role="tabpanel">
-<h3>Scorecard</h3>
-<div id="scorecardContent">
-<p>উপরের ড্রপডাউন থেকে ম্যাচ সিলেক্ট করুন।</p>
-</div>
-</div>
-<div aria-labelledby="squads-tab" class="card hidden" id="squads-panel" role="tabpanel">
-<h3>Teams</h3>
-<div class="squad-list">
-<a class="squad-item" data-team="Corporate_Credit" href="#">Corporate Credit</a>
-<a class="squad-item" data-team="Card_Operation" href="#">Card Operation</a>
-<a class="squad-item" data-team="ICT_Operation" href="#">ICT Operation</a>
-<a class="squad-item" data-team="Dhaka_South_Zone" href="#">Dhaka South Zone</a>
-<a class="squad-item" data-team="Narayangonj_Zone" href="#">Narayangonj Zone</a>
-<a class="squad-item" data-team="Dhaka_Central_Zone" href="#">Dhaka Central Zone</a>
-<a class="squad-item" data-team="Treasury" href="#">Treasury</a>
-<a class="squad-item" data-team="Card_Business" href="#">Card Business</a>
-<a class="squad-item" data-team="CAM_RD_Division" href="#">CAM &amp; RD</a>
-<a class="squad-item" data-team="ID_Division" href="#">ID</a>
-<a class="squad-item" data-team="SDD_Division" href="#">SDD</a>
-<a class="squad-item" data-team="Principal_Branch" href="#">Principal</a>
-</div>
-</div>
-<div aria-labelledby="points-tab" class="card hidden" id="points-panel" role="tabpanel">
-    <div class="points-table-section" id="points-table-container">
-        <h3>Points Table</h3>
-        <p>Loading points table...</p>
-    </div>
-</div>
-<div aria-labelledby="fixtures-tab" class="card hidden" id="fixtures-panel" role="tabpanel">
-    <h3>Full Fixture</h3>
-    <h4>Group stage — 12 matches</h4>
-
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Sat 1 Nov 2025</div>
-        <div class="fixture-match-item" data-match-ref="id_vs_principal">
-            <div class="fixture-match-item-details">
-                <span class="match-time">07:30–10:00</span>
-                <div class="match-teams"><span>ID</span> <span class="vs">vs</span> <span>Principal</span></div>
-                <span class="match-group">(Group D)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="cc_vs_co">
-            <div class="fixture-match-item-details">
-                <span class="match-time">10:00–12:30</span>
-                <div class="match-teams"><span>Corporate Credit</span> <span class="vs">vs</span> <span>Card Operation</span></div>
-                <span class="match-group">(Group A)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="tr_vs_cb">
-            <div class="fixture-match-item-details">
-                <span class="match-time">12:30–03:00</span>
-                <div class="match-teams"><span>Treasury</span> <span class="vs">vs</span> <span>Card Business</span></div>
-                <span class="match-group">(Group C)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Fri 7 Nov 2025</div>
-        <div class="fixture-match-item" data-match-ref="dc_vs_ds">
-            <div class="fixture-match-item-details">
-                <span class="match-time">07:30–10:00</span>
-                <div class="match-teams"><span>Dhaka Central Zone</span> <span class="vs">vs</span> <span>Dhaka South Zone</span></div>
-                <span class="match-group">(Group B)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="co_vs_ict">
-            <div class="fixture-match-item-details">
-                <span class="match-time">10:00–12:30</span>
-                <div class="match-teams"><span>Card Operation</span> <span class="vs">vs</span> <span>ICT Operation</span></div>
-                <span class="match-group">(Group A)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="cb_vs_cam">
-            <div class="fixture-match-item-details">
-                <span class="match-time">12:30–03:00</span>
-                <div class="match-teams"><span>Card Business</span> <span class="vs">vs</span> <span>CAM &amp; RD</span></div>
-                <span class="match-group">(Group C)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Sat 8 Nov 2025</div>
-        <div class="fixture-match-item" data-match-ref="cc_vs_ict">
-            <div class="fixture-match-item-details">
-                <span class="match-time">07:30–10:00</span>
-                <div class="match-teams"><span>Corporate Credit</span> <span class="vs">vs</span> <span>ICT Operation</span></div>
-                <span class="match-group">(Group A)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="id_vs_sdd">
-            <div class="fixture-match-item-details">
-                <span class="match-time">10:00–12:30</span>
-                <div class="match-teams"><span>ID</span> <span class="vs">vs</span> <span>SDD</span></div>
-                <span class="match-group">(Group D)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="ds_vs_nz">
-            <div class="fixture-match-item-details">
-                <span class="match-time">12:30–03:00</span>
-                <div class="match-teams"><span>Dhaka South Zone</span> <span class="vs">vs</span> <span>Narayangonj Zone</span></div>
-                <span class="match-group">(Group B)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-    
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Fri 14 Nov 2025</div>
-        <div class="fixture-match-item" data-match-ref="tr_vs_cam">
-            <div class="fixture-match-item-details">
-                <span class="match-time">07:30–10:00</span>
-                <div class="match-teams"><span>Treasury</span> <span class="vs">vs</span> <span>CAM &amp; RD</span></div>
-                <span class="match-group">(Group C)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="sdd_vs_p">
-            <div class="fixture-match-item-details">
-                <span class="match-time">10:00–12:30</span>
-                <div class="match-teams"><span>SDD</span> <span class="vs">vs</span> <span>Principal</span></div>
-                <span class="match-group">(Group D)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="dc_vs_nz">
-            <div class="fixture-match-item-details">
-                <span class="match-time">12:30–03:00</span>
-                <div class="match-teams"><span>Dhaka Central Zone</span> <span class="vs">vs</span> <span>Narayangonj Zone</span></div>
-                <span class="match-group">(Group B)</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-
-    <h4 class="fixture-knockout-header">Knockout stage — 7 matches</h4>
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Sat 15 Nov 2025 — Quarterfinals</div>
-        <div class="fixture-match-item" data-match-ref="qf1">
-            <div class="fixture-match-item-details">
-                <span class="match-time">08:00–11:30</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">QF1</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="qf2">
-            <div class="fixture-match-item-details">
-                <span class="match-time">11:30–03:00</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">QF2</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Fri 21 Nov 2025 — Quarterfinals</div>
-        <div class="fixture-match-item" data-match-ref="qf4">
-            <div class="fixture-match-item-details">
-                <span class="match-time">08:00–11:30</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">QF4</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="qf3">
-            <div class="fixture-match-item-details">
-                <span class="match-time">11:30–03:00</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">QF3</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Sat 22 Nov 2025 — Semifinals</div>
-        <div class="fixture-match-item" data-match-ref="sf1">
-            <div class="fixture-match-item-details">
-                <span class="match-time">08:00–11:30</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">SF1</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-        <div class="fixture-match-item" data-match-ref="sf2">
-            <div class="fixture-match-item-details">
-                <span class="match-time">11:30–03:00</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">SF2</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-    <div class="fixture-day-card">
-        <div class="fixture-day-header">Sat 28 Nov 2025 — Final</div>
-        <div class="fixture-match-item" data-match-ref="final">
-            <div class="fixture-match-item-details">
-                <span class="match-time">09:00–03:00</span>
-                <div class="match-teams"><span class="ko-team">TBD</span> <span class="vs">vs</span> <span class="ko-team">TBD</span></div>
-                <span class="match-group">Final</span>
-            </div>
-            <div class="match-notes"></div>
-        </div>
-    </div>
-    <p class="disclaimer">***Schedule may be changed based on different circumstances***</p>
-</div>
-</div>
-<div class="modal-overlay" id="squadModal">
-<div class="modal-content">
-<div class="modal-header">
-<h3 id="modalTeamName">Player List</h3>
-<span class="modal-close">×</span>
-</div>
-<div id="modal-body-content"></div>
-</div>
-</div>
-
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDWGHs6f3-m0sWt9p2WfbqojEh7DZzmdys",
-        authDomain: "cricket-carnival-2025.firebaseapp.com",
-        databaseURL: "https://cricket-carnival-2025-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "cricket-carnival-2025",
-        storageBucket: "cricket-carnival-2025.appspot.com",
-        messagingSenderId: "669183768621",
-        appId: "1:669183768621:web:a284feab1070999525e0a4"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-    const dbRef = ref(database); // ডেটাবেসের রুটে listen করুন
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const welcomeOverlay = document.getElementById('welcome-overlay');
-        setTimeout(() => {
-            welcomeOverlay.classList.add('hidden');
-        }, 2500);
-    });
-
-    let scorecardData = {};
-    let squadData = {};
-    let pointsTableData = {};
-    let fixtureCustomData = {};
-    let currentMatchRef = null;
-
-    // ডিফল্ট স্কোয়াড ডেটা
-    const defaultSquadData = {
-        "Corporate_Credit": Array.from({length: 11}, (_, i) => ({ name: `CC Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=cc${i}`, position: 'Player' })),
-        "Card_Operation": Array.from({length: 11}, (_, i) => ({ name: `CO Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=co${i}`, position: 'Player' })),
-        "ICT_Operation": Array.from({length: 11}, (_, i) => ({ name: `ICT Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=ict${i}`, position: 'Player' })),
-        "Dhaka_South_Zone": Array.from({length: 11}, (_, i) => ({ name: `DSZ Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=dsz${i}`, position: 'Player' })),
-        "Narayangonj_Zone": Array.from({length: 11}, (_, i) => ({ name: `NZ Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=nz${i}`, position: 'Player' })),
-        "Dhaka_Central_Zone": Array.from({length: 11}, (_, i) => ({ name: `DCZ Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=dcz${i}`, position: 'Player' })),
-        "Treasury": Array.from({length: 11}, (_, i) => ({ name: `Treasury Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=tr${i}`, position: 'Player' })),
-        "Card_Business": Array.from({length: 11}, (_, i) => ({ name: `CB Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=cb${i}`, position: 'Player' })),
-        "CAM_RD_Division": Array.from({length: 11}, (_, i) => ({ name: `CAM Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=cam${i}`, position: 'Player' })),
-        "ID_Division": Array.from({length: 11}, (_, i) => ({ name: `ID Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=id${i}`, position: 'Player' })),
-        "SDD_Division": Array.from({length: 11}, (_, i) => ({ name: `SDD Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=sdd${i}`, position: 'Player' })),
-        "Principal_Branch": Array.from({length: 11}, (_, i) => ({ name: `Principal Player ${i+1}`, photoUrl: `https://i.pravatar.cc/50?u=pr${i}`, position: 'Player' })),
-    };
-
-    // রিয়েল-টাইম লিসেনার
-    onValue(dbRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            console.log("Real-time update received!");
-            scorecardData = data.scorecardData || {};
-            squadData = data.squadData && Object.keys(data.squadData).length > 0 ? data.squadData : defaultSquadData;
-            pointsTableData = data.pointsTable || {};
-            fixtureCustomData = data.fixtureCustomData || {};
-            
-            updateAllUI();
-        } else {
-             squadData = defaultSquadData;
-             updateAllUI();
-        }
-    });
-
-    function updateAllUI() {
-        renderPointsTable();
-        updateFixtures();
-        updateMainDropdown();
-
-        const matchInfo = getMatchInfo();
-        if (matchInfo) {
-            renderScorecard(matchInfo.matchRef, matchInfo.team1, matchInfo.team2);
-            renderLiveScore(matchInfo.matchRef);
-            
-            const team1Name = matchInfo.team1;
-            const team2Name = matchInfo.team2;
-
-            if (teamNameList.includes(team1Name) && teamNameList.includes(team2Name)) {
-                const team1Key = reverseTeamNameMap[team1Name];
-                const team2Key = reverseTeamNameMap[team2Name];
-                if (team1Key && team2Key) {
-                    displayPlayingXI(team1Key, team2Key, team1Name, team2Name);
-                }
-            }
-        }
-    }
-
-    const teamNameList = [ "Corporate Credit", "Card Operation", "ICT Operation", "Dhaka South Zone", "Narayangonj Zone", "Dhaka Central Zone", "Treasury", "Card Business", "CAM & RD", "ID", "SDD", "Principal" ];
-    const reverseTeamNameMap = {
-        "Corporate Credit": "Corporate_Credit", "Card Operation": "Card_Operation", "ICT Operation": "ICT_Operation",
-        "Dhaka South Zone": "Dhaka_South_Zone", "Narayangonj Zone": "Narayangonj_Zone", "Dhaka Central Zone": "Dhaka_Central_Zone",
-        "Treasury": "Treasury", "Card Business": "Card_Business", "CAM & RD": "CAM_RD_Division",
-        "ID": "ID_Division", "SDD": "SDD_Division", "Principal": "Principal_Branch"
-    };
-    const fixtureData = [
-        { matchRef: 'id_vs_principal', date: "Sat 1 Nov 2025", time: "07:30–10:00" },
-        { matchRef: 'cc_vs_co', date: "Sat 1 Nov 2025", time: "10:00–12:30" },
-        { matchRef: 'tr_vs_cb', date: "Sat 1 Nov 2025", time: "12:30–03:00" },
-        { matchRef: 'dc_vs_ds', date: "Fri 7 Nov 2025", time: "07:30–10:00" },
-        { matchRef: 'co_vs_ict', date: "Fri 7 Nov 2025", time: "10:00–12:30" },
-        { matchRef: 'cb_vs_cam', date: "Fri 7 Nov 2025", time: "12:30–03:00" },
-        { matchRef: 'cc_vs_ict', date: "Sat 8 Nov 2025", time: "07:30–10:00" },
-        { matchRef: 'id_vs_sdd', date: "Sat 8 Nov 2025", time: "10:00–12:30" },
-        { matchRef: 'ds_vs_nz', date: "Sat 8 Nov 2025", time: "12:30–03:00" },
-        { matchRef: 'tr_vs_cam', date: "Fri 14 Nov 2025", time: "07:30–10:00" },
-        { matchRef: 'sdd_vs_p', date: "Fri 14 Nov 2025", time: "10:00–12:30" },
-        { matchRef: 'dc_vs_nz', date: "Fri 14 Nov 2025", time: "12:30–03:00" },
-        { matchRef: 'qf1', date: "Sat 15 Nov 2025", time: "08:00–11:30" },
-        { matchRef: 'qf2', date: "Sat 15 Nov 2025", time: "11:30–03:00" },
-        { matchRef: 'qf4', date: "Fri 21 Nov 2025", time: "08:00–11:30" },
-        { matchRef: 'qf3', date: "Fri 21 Nov 2025", time: "11:30–03:00" },
-        { matchRef: 'sf1', date: "Sat 22 Nov 2025", time: "08:00–11:30" },
-        { matchRef: 'sf2', date: "Sat 22 Nov 2025", time: "11:30–03:00" },
-        { matchRef: 'final', date: "Sat 28 Nov 2025", time: "09:00–03:00" },
-    ];
-
-    const tabs = document.querySelectorAll('[role="tab"]');
-    const tabPanels = document.querySelectorAll('[role="tabpanel"]');
-    function switchTab(newTab) {
-      const targetPanelId = newTab.getAttribute('aria-controls');
-      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); t.setAttribute('tabindex', '-1'); });
-      newTab.classList.add('active'); newTab.setAttribute('aria-selected', 'true'); newTab.removeAttribute('tabindex');
-      tabPanels.forEach(p => {
-        if (p.getAttribute('id') === targetPanelId) p.classList.remove('hidden'); else p.classList.add('hidden');
-      });
-    }
-    tabs.forEach(tab => { tab.addEventListener('click', e => { switchTab(e.currentTarget); }); });
-
-    const dropdownBtn = document.getElementById("dropdownBtn");
-    const dropdownContent = document.getElementById("myDropdown");
-    const selectedMatchSpan = document.getElementById("selectedMatch");
-    const infoPanel = document.getElementById('info-panel');
-    const dateTimeElement = document.getElementById('matchDateTime'); 
-
-    dropdownBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isShown = dropdownContent.classList.contains('show');
-        if (isShown) dropdownContent.classList.remove('show'); else dropdownContent.classList.add('show');
-    });
-    document.addEventListener('click', (ev) => {
-        const drop = document.getElementById('myDropdown');
-        if (drop && drop.classList.contains('show')) drop.classList.remove('show');
-    });
-    dropdownContent.addEventListener('click', (e)=>{ e.stopPropagation(); });
-
-    function displayPlayingXI(team1Key, team2Key, team1Name, team2Name) {
-        const team1Players = squadData[team1Key] || [];
-        const team2Players = squadData[team2Key] || [];
-        let finalHtml = '<h3>Playing XI</h3><div class="playing-xi-container">';
-        finalHtml += `<div class="team-column"><h4 class="team-name-header">${team1Name}</h4><ul class="player-list">`;
-        team1Players.forEach(player => { finalHtml += `<li><img src="${player.photoUrl}" alt="${player.name}" class="player-photo-small"><div class="player-details"><span class="player-name">${player.name}</span><span class="player-role">${player.position}</span></div></li>`; });
-        finalHtml += `</ul></div>`;
-        finalHtml += `<div class="team-column"><h4 class="team-name-header">${team2Name}</h4><ul class="player-list">`;
-        team2Players.forEach(player => { finalHtml += `<li><img src="${player.photoUrl}" alt="${player.name}" class="player-photo-small"><div class="player-details"><span class="player-name">${player.name}</span><span class="player-role">${player.position}</span></div></li>`; });
-        finalHtml += `</ul></div></div>`;
-        infoPanel.innerHTML = finalHtml;
-    }
-
-    const modal = document.getElementById('squadModal');
-    const modalTeamName = document.getElementById('modalTeamName');
-    const modalBody = document.getElementById('modal-body-content');
-    const closeModalBtn = document.querySelector('.modal-close');
-    
-    document.addEventListener('click', function(e){
-        const item = e.target.closest && e.target.closest('.squad-item');
-        if (!item) return;
-        e.preventDefault();
-        const teamId = item.dataset.team;
-        createPlayerTable(teamId);
-        modal.classList.add('show');
-        modal.style.display = 'flex';
-    });
-
-    function createPlayerTable(teamId) {
-        const teamName = teamId.replace(/_/g, ' ');
-        const players = squadData[teamId] || [];
-        modalTeamName.textContent = `${teamName} - Player List`;
-        let tableHtml = `<table class="player-table"><thead><tr><th>Photo</th><th>Name</th><th>Position</th></tr></thead><tbody>`;
-        players.forEach(player => {
-            tableHtml += `<tr><td><img src="${player.photoUrl}" alt="${player.name}" class="player-photo"></td><td>${player.name}</td><td>${player.position}</td></tr>`;
-        });
-        tableHtml += `</tbody></table>`;
-        modalBody.innerHTML = tableHtml;
-    }
-
-    closeModalBtn.onclick = function(){ modal.classList.remove('show'); modal.style.display = 'none'; }
-    modal.addEventListener('click', function(ev){ if (ev.target === modal) { modal.classList.remove('show'); modal.style.display = 'none'; } });
-
-    function getMatchInfo() {
-      if (!currentMatchRef) return null;
-      const matchLink = document.querySelector(`#myDropdown a[data-match-ref="${currentMatchRef}"]`);
-      if (!matchLink) return null;
-      const matchText = matchLink.getAttribute('data-match');
-      const teams = matchText.replace(/QF\d:\s*|SF\d:\s*|Final:\s*/i, '').split(/\s+vs\s+/i);
-      if (teams.length < 2) return null;
-      return {
-          matchRef: currentMatchRef,
-          team1: teams[0].trim(),
-          team2: teams[1].split("(")[0].trim()
-      };
-    }
-
-    function renderInnings(matchRef, battingTeam, bowlingTeam, inningsTitle, targetInfo = null) {
-        let html = ``;
-        if (targetInfo && !targetInfo.matchOver) {
-            html += `<div class="target-display">${targetInfo.team} needs ${targetInfo.runs} runs in ${targetInfo.balls} balls to win.</div>`;
-        }
-        html += `<h3>${inningsTitle} - ${battingTeam}</h3>`;
-        const matchData = scorecardData[matchRef];
-        
-        html += `<table class="player-table">
-            <thead>
-                <tr><th>Batsman</th><th>How Out</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th></tr>
-            </thead><tbody>`;
-
-        if (matchData && matchData[battingTeam] && matchData[battingTeam].batting) {
-            matchData[battingTeam].batting.forEach((batsman, i) => {
-                const sr = batsman.balls > 0 ? ((batsman.runs / batsman.balls) * 100).toFixed(2) : "0.00";
-                html += `<tr class="${batsman.isOut ? 'batsman-out-row' : ''}">
-                    <td>${batsman.name}</td>
-                    <td>${batsman.howOut || ''}</td>
-                    <td>${batsman.runs}</td>
-                    <td>${batsman.balls}</td>
-                    <td>${batsman.fours}</td>
-                    <td>${batsman.sixes}</td>
-                    <td>${sr}</td>
-                </tr>`;
-            });
-        }
-        html += `</tbody><tfoot>
-            <tr class="batting-summary-row">
-                <td colspan="2">Extra</td>
-                <td colspan="5">${(matchData && matchData[battingTeam] && matchData[battingTeam].extraRuns) || 0}</td>
-            </tr>
-            <tr class="batting-summary-row">
-                <td colspan="2">Total Run</td>
-                <td colspan="5" id="total-${matchRef}-${battingTeam.replace(/\s+/g, '-')}">0</td>
-            </tr>
-            <tr class="batting-summary-row">
-                <td colspan="2">Overs</td>
-                <td colspan="5" id="overs-wickets-${matchRef}-${battingTeam.replace(/\s+/g, '-')}">0.0 / 0</td>
-            </tr>
-        </tfoot></table>`;
-
-        html += `<h4>${bowlingTeam} Bowling</h4>
-            <table class="player-table">
-            <thead><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th></tr></thead><tbody>`;
-        if (matchData && matchData[bowlingTeam] && matchData[bowlingTeam].bowling) {
-            matchData[bowlingTeam].bowling.forEach((bowler, i) => {
-                html += `<tr>
-                    <td>${bowler.name || 'New Bowler'}</td>
-                    <td>${bowler.overs || 0}</td>
-                    <td>${bowler.runs || 0}</td>
-                    <td>${bowler.wkts || 0}</td>
-                </tr>`;
-            });
-        }
-        html += `</tbody></table>`;
-        return html;
-    }
-
-    function renderScorecard(matchRef, team1, team2) {
-        if (!scorecardData[matchRef]) {
-             document.getElementById("scorecardContent").innerHTML = `<p>এই ম্যাচের জন্য এখনো স্কোরকার্ড শুরু হয়নি।</p>`;
-             return;
-        }
-        const matchData = scorecardData[matchRef];
-        const toss = matchData.toss;
-
-        let html = `<div class="toss-section">
-            <span><strong>Toss:</strong> ${toss.winner} won the toss and chose to ${toss.decision}.</span>
-        </div>`;
-        
-        html += `<div class="scorecard-settings">
-            <span><strong>Match Overs:</strong> ${matchData.totalOvers}</span>
-        </div>`;
-
-        const firstInningsTeam = toss.decision === 'bat' ? toss.winner : (toss.winner === team1 ? team2 : team1);
-        const secondInningsTeam = firstInningsTeam === team1 ? team2 : team1;
-        const { targetInfo } = calculateResult(matchRef);
-
-        html += renderInnings(matchRef, firstInningsTeam, secondInningsTeam, '1st Innings');
-        html += renderInnings(matchRef, secondInningsTeam, firstInningsTeam, '2nd Innings', targetInfo);
-
-        document.getElementById("scorecardContent").innerHTML = html;
-        
-        updateTotal(matchRef, team1);
-        updateTotal(matchRef, team2);
-        updateOversAndWickets(matchRef, firstInningsTeam, secondInningsTeam);
-        updateOversAndWickets(matchRef, secondInningsTeam, firstInningsTeam);
-    }
-
-    function calculateResult(matchRef) {
-        const matchInfo = getMatchInfo();
-        if (!matchInfo || !scorecardData[matchRef]) return { resultText: null, targetInfo: null };
-        
-        const { team1, team2 } = matchInfo;
-        const matchData = scorecardData[matchRef];
-        const toss = matchData.toss;
-        const firstInningsTeam = toss.decision === 'bat' ? toss.winner : (toss.winner === team1 ? team2 : team1);
-        const secondInningsTeam = firstInningsTeam === team1 ? team2 : team1;
-
-        const totalBallsForMatch = (matchData.totalOvers || 10) * 6;
-        const score1 = calculateTeamTotal(matchRef, firstInningsTeam);
-        const score2 = calculateTeamTotal(matchRef, secondInningsTeam);
-        const balls2 = calculateBallsBowled(matchRef, firstInningsTeam);
-        const wickets2 = matchData[secondInningsTeam].batting.filter(p => p.isOut).length;
-        const target = score1 + 1;
-        let resultText = null;
-        let matchOver = false;
-
-        if (score2 >= target) {
-            resultText = `${secondInningsTeam} won by ${10 - wickets2} wickets.`;
-            matchOver = true;
-        } else if (balls2 >= totalBallsForMatch || wickets2 >= 10) {
-            if (score1 > score2) {
-                resultText = `${firstInningsTeam} won by ${score1 - score2} runs.`;
-            } else if (score2 > score1) {
-                resultText = `${secondInningsTeam} won by ${10 - wickets2} wickets.`;
-            } else {
-                resultText = "Match Tied.";
-            }
-            matchOver = true;
-        }
-        
-        const targetInfo = {
-            team: secondInningsTeam,
-            runs: Math.max(0, target - score2),
-            balls: Math.max(0, totalBallsForMatch - balls2),
-            matchOver: matchOver
-        };
-        return { resultText, targetInfo };
-    }
-
-    function renderLiveScore(matchRef) {
-        const livePanel = document.getElementById('live-panel');
-        const matchInfo = getMatchInfo();
-        if (!matchInfo || !scorecardData[matchRef]) {
-            livePanel.innerHTML = `<h3>Live Score</h3><p>ম্যাচের তথ্য পাওয়া যায়নি।</p>`;
-            return;
-        }
-
-        const { team1, team2 } = matchInfo;
-        const matchData = scorecardData[matchRef];
-        const toss = matchData.toss;
-        const firstInningsTeam = toss.decision === 'bat' ? toss.winner : (toss.winner === team1 ? team2 : team1);
-        const secondInningsTeam = firstInningsTeam === team1 ? team2 : team1;
-
-        let html = `<div class="live-score-container"><h3>${team1} vs ${team2}</h3>`;
-        html += `<div class="live-score-summary">${toss.winner} won the toss and chose to ${toss.decision}.</div>`;
-
-        const score1 = calculateTeamTotal(matchRef, firstInningsTeam);
-        const balls1 = calculateBallsBowled(matchRef, secondInningsTeam);
-        const overs1 = `${Math.floor(balls1 / 6)}.${balls1 % 6}`;
-        const wickets1 = matchData[firstInningsTeam].batting.filter(p => p.isOut).length;
-        html += `<div class="live-innings-card">
-            <div class="team-score">
-                <span>${firstInningsTeam}</span>
-                <span>${score1} / ${wickets1} <small>(${overs1})</small></span>
-            </div>`;
-            const notOutBatsmen1 = matchData[firstInningsTeam].batting.filter(p => !p.isOut).slice(0, 2);
-            const lastBowler2 = matchData[secondInningsTeam].bowling.slice(-1)[0];
-            if(notOutBatsmen1.length > 0 || lastBowler2) {
-                html += `<div class="live-player-details">
-                    <table>
-                    ${notOutBatsmen1.map(b => `<tr><td>${b.name}*</td><td>${b.runs} (${b.balls})</td></tr>`).join('')}
-                    ${lastBowler2 ? `<tr><td>${lastBowler2.name}</td><td>${lastBowler2.overs}-${lastBowler2.runs}-${lastBowler2.wkts}</td></tr>` : ''}
-                    </table>
-                 </div>`;
-            }
-        html += `</div>`;
-      
-        const balls2 = calculateBallsBowled(matchRef, firstInningsTeam);
-        const totalBallsForMatch = (matchData.totalOvers || 10) * 6;
-        if(balls1 >= totalBallsForMatch || wickets1 >= 10 || balls2 > 0) {
-            const score2 = calculateTeamTotal(matchRef, secondInningsTeam);
-            const overs2 = `${Math.floor(balls2 / 6)}.${balls2 % 6}`;
-            const wickets2 = matchData[secondInningsTeam].batting.filter(p => p.isOut).length;
-
-            html += `<div class="live-innings-card">
-                <div class="team-score">
-                    <span>${secondInningsTeam}</span>
-                    <span>${score2} / ${wickets2} <small>(${overs2})</small></span>
-                </div>`;
-
-            const { resultText, targetInfo } = calculateResult(matchRef);
-            if (targetInfo && !targetInfo.matchOver) {
-                html += `<div class="target-display" style="margin-top: 15px;">Needs ${targetInfo.runs} runs in ${targetInfo.balls} balls.</div>`;
-            }
-          
-            const notOutBatsmen2 = matchData[secondInningsTeam].batting.filter(p => !p.isOut).slice(0, 2);
-            const lastBowler1 = matchData[firstInningsTeam].bowling.slice(-1)[0];
-            html += `<div class="live-player-details">
-                <table>
-                ${notOutBatsmen2.map(b => `<tr><td>${b.name}*</td><td>${b.runs} (${b.balls})</td></tr>`).join('')}
-                ${lastBowler1 ? `<tr><td>${lastBowler1.name}</td><td>${lastBowler1.overs}-${lastBowler1.runs}-${lastBowler1.wkts}</td></tr>` : ''}
-                </table>
-            </div></div>`;
-        } 
-
-        const { resultText } = calculateResult(matchRef);
-        if(resultText){
-            html += `<div class="match-result">${resultText}</div>`;
-        }
-
-        html += `</div>`;
-        livePanel.innerHTML = html;
-    }
-
-    function updateTotal(matchRef, team) {
-        if (!scorecardData[matchRef] || !scorecardData[matchRef][team]) return;
-        let totalRuns = calculateTeamTotal(matchRef, team);
-        const safeTeamName = team.replace(/\s+/g, '-');
-        const totalEl = document.getElementById(`total-${matchRef}-${safeTeamName}`);
-        if(totalEl) totalEl.innerText = totalRuns;
-    }
-  
-    function updateOversAndWickets(matchRef, battingTeam, bowlingTeam) {
-        const matchData = scorecardData[matchRef];
-        if (!matchData) return;
-        const wickets = matchData[battingTeam].batting.filter(p => p.isOut).length;
-        const totalBalls = calculateBallsBowled(matchRef, bowlingTeam);
-        const overs = `${Math.floor(totalBalls / 6)}.${totalBalls % 6}`;
-        const safeBattingTeam = battingTeam.replace(/\s+/g, '-');
-        const oversEl = document.getElementById(`overs-wickets-${matchRef}-${safeBattingTeam}`);
-        if(oversEl) oversEl.innerText = `${overs} / ${wickets}`;
-    }
-
-    function calculateTeamTotal(matchRef, team) {
-        const data = scorecardData[matchRef]?.[team];
-        if (!data) return 0;
-        let totalRuns = data.batting.reduce((acc, p) => acc + (p.runs || 0), 0);
-        totalRuns += data.extraRuns || 0;
-        return totalRuns;
-    }
-
-    function calculateBallsBowled(matchRef, bowlingTeam) {
-        const data = scorecardData[matchRef]?.[bowlingTeam];
-        if (!data || !data.bowling) return 0;
-        return data.bowling.reduce((acc, b) => {
-            const oversStr = String(b.overs || '0.0');
-            const parts = oversStr.split('.');
-            const fullOvers = parseInt(parts[0], 10) || 0;
-            const balls = parseInt(parts[1], 10) || 0;
-            return acc + (fullOvers * 6) + balls;
-        }, 0);
-    }
-  
-    dropdownContent.addEventListener('click', (event) => {
-        const anchor = event.target.closest && event.target.closest('a[data-match-ref]');
-        if (!anchor) return;
-        event.preventDefault();
-        const matchText = anchor.getAttribute('data-match');
-        const matchRef = anchor.getAttribute('data-match-ref');
-        currentMatchRef = matchRef;
-        selectedMatchSpan.textContent = matchText;
-        dropdownContent.classList.remove('show');
-
-        const fixture = fixtureData.find(f => f.matchRef === matchRef);
-        if (fixture) {
-            dateTimeElement.innerHTML = `<strong>Date & Time:</strong> ${fixture.date}, ${fixture.time} LOCAL`;
-        }
-        updateAllUI();
-    });
-
-    function renderPointsTable() {
-        const container = document.getElementById('points-table-container');
-        if (!pointsTableData || Object.keys(pointsTableData).length === 0) {
-            container.innerHTML = '<h3>Points Table</h3><p>No points table data available yet.</p>';
-            return;
-        }
-
-        let html = '<h3>Points Table</h3>';
-        const groupOrder = ["Group_A", "Group_B", "Group_C", "Group_D"];
-
-        for (const groupName of groupOrder) {
-            const groupData = pointsTableData[groupName];
-            if (groupData) {
-                const cleanGroupName = groupName.replace('_', ' ');
-                html += `<h4>${cleanGroupName}</h4>
-                    <table class="points-table">
-                        <thead><tr><th>Team</th><th>M</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead>
-                        <tbody>`;
-                
-                groupData.forEach(team => {
-                    html += `<tr>
-                        <td>${team.team}</td>
-                        <td>${team.M}</td>
-                        <td>${team.W}</td>
-                        <td>${team.L}</td>
-                        <td>${team.Pts}</td>
-                        <td>${team.NRR}</td>
-                    </tr>`;
-                });
-                html += `</tbody></table>`;
-            }
-        }
-        container.innerHTML = html;
-    }
-
-    function updateFixtures() {
-        if (!fixtureCustomData) return;
-
-        document.querySelectorAll('.fixture-match-item').forEach(item => {
-            const matchRef = item.dataset.matchRef;
-            const data = fixtureCustomData[matchRef];
-            if (data) {
-                // Update notes
-                const notesEl = item.querySelector('.match-notes');
-                if (notesEl) notesEl.textContent = data.notes || '';
-
-                // Update knockout teams
-                const teamSpans = item.querySelectorAll('.ko-team');
-                if (teamSpans.length === 2) {
-                    teamSpans[0].textContent = data.team1 || 'TBD';
-                    teamSpans[1].textContent = data.team2 || 'TBD';
-                }
-            }
-        });
-    }
-
-    function updateMainDropdown() {
-        if (!pointsTableData || !pointsTableData.knockoutSelections) return;
-        
-        const selections = pointsTableData.knockoutSelections;
-        const knockoutMapping = {
-            qf1: { link: document.querySelector('a[data-match-ref="qf1"]'), prefix: 'QF1: ', t1: selections.k_qf1_t1, t2: selections.k_qf1_t2},
-            qf2: { link: document.querySelector('a[data-match-ref="qf2"]'), prefix: 'QF2: ', t1: selections.k_qf2_t1, t2: selections.k_qf2_t2},
-            qf3: { link: document.querySelector('a[data-match-ref="qf3"]'), prefix: 'QF3: ', t1: selections.k_qf3_t1, t2: selections.k_qf3_t2},
-            qf4: { link: document.querySelector('a[data-match-ref="qf4"]'), prefix: 'QF4: ', t1: selections.k_qf4_t1, t2: selections.k_qf4_t2},
-            sf1: { link: document.querySelector('a[data-match-ref="sf1"]'), prefix: 'SF1: ', t1: selections.k_sf1_t1, t2: selections.k_sf1_t2},
-            sf2: { link: document.querySelector('a[data-match-ref="sf2"]'), prefix: 'SF2: ', t1: selections.k_sf2_t1, t2: selections.k_sf2_t2},
-            final: { link: document.querySelector('a[data-match-ref="final"]'), prefix: 'Final: ', t1: selections.k_final_t1, t2: selections.k_final_t2},
-        };
-
-        for (const key in knockoutMapping) {
-            const match = knockoutMapping[key];
-            if (match.link) {
-                const team1 = match.t1 || 'TBD';
-                const team2 = match.t2 || 'TBD';
-                const newText = `${match.prefix}${team1} vs ${team2}`;
-                match.link.textContent = newText;
-                match.link.setAttribute('data-match', newText);
-            }
-        }
-    }
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cricket Scorer Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
 </script>
+<style>
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotateZ(720deg); opacity: 0; }
+}
 
+.confetti {
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 20px;
+  opacity: 0;
+  animation: confetti-fall 5s linear infinite;
+}
+
+@keyframes modal-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-animate {
+  animation: modal-pop-in 0.4s ease-out forwards;
+}
+
+/* Base styles for PDF export container */
+.pdf-export-container {
+    background-color: white !important;
+    color: black !important;
+}
+.pdf-export-container * {
+    background-color: transparent !important;
+    border-color: #e5e7eb !important; /* gray-200 */
+    color: inherit !important;
+}
+.pdf-export-container .dark\\:bg-gray-800,
+.pdf-export-container .dark\\:bg-gray-900 {
+    background-color: white !important;
+}
+.pdf-export-container .dark\\:text-gray-200,
+.pdf-export-container .dark\\:text-gray-300,
+.pdf-export-container .dark\\:text-gray-400,
+.pdf-export-container .dark\\:text-gray-500 {
+    color: black !important;
+}
+.pdf-export-container .dark\\:border-gray-700 {
+    border-color: #e5e7eb !important;
+}
+
+/* Modern Scorecard PDF Styles */
+.pdf-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #374151; /* gray-700 */
+    padding: 1rem; /* Add padding around the whole container */
+}
+.pdf-container h2 {
+    font-size: 1.5rem; /* Larger title */
+    font-weight: 700;
+    text-align: center;
+    color: #111827; /* gray-900 */
+    margin-bottom: 0.25rem;
+}
+.pdf-container .pdf-match-result { /* New class for the result string */
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    color: #16A34A; /* green-600 */
+    margin-bottom: 0.5rem;
+}
+.pdf-container p {
+    font-size: 0.8rem;
+    color: #6B7280; /* gray-500 */
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.pdf-container h3 { /* Section headers like "Innings 1" */
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3B82F6; /* blue-500 */
+    color: #1F2937; /* gray-800 */
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+.pdf-card {
+    border: 1px solid #E5E7EB; /* gray-200 */
+    border-radius: 0.75rem; /* More rounded */
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.pdf-card h3 { /* Card headers for Batting/Bowling */
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1rem !important;
+    background-color: #F9FAFB !important; /* gray-50 */
+    border-bottom: 1px solid #E5E7EB !important; /* gray-200 */
+    color: #111827 !important; /* gray-900 */
+    margin: 0 !important;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    text-align: left !important;
+}
+.pdf-table {
+    width: 100%;
+    font-size: 0.75rem;
+    border-collapse: collapse;
+}
+.pdf-table th, .pdf-table td {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #F3F4F6; /* gray-100 */
+}
+.pdf-table thead {
+    background-color: #F3F4F6; /* gray-100 */
+    color: #4B5563; /* gray-600 */
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+.pdf-table .text-right {
+    text-align: right;
+}
+.pdf-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.pdf-table .font-bold {
+    font-weight: 600;
+}
+.pdf-batsman-dismissal {
+    font-size: 0.7rem;
+    color: #9CA3AF; /* gray-400 */
+    padding-top: 0.1rem;
+}
+.pdf-summary-row {
+    font-weight: 600;
+    background-color: #F9FAFB; /* gray-50 */
+    border-top: 1px solid #E5E7EB; /* gray-200 */
+}
+.pdf-summary-row .font-normal { /* For extras description */
+    font-weight: 400;
+}
+</style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
